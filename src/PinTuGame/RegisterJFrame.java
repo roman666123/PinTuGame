@@ -1,3 +1,5 @@
+package PinTuGame;
+
 import javax.swing.*;
 
 public class RegisterJFrame extends JFrame {
