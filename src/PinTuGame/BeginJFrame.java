@@ -11,6 +11,7 @@ public class BeginJFrame extends JFrame{
 
 
         this.setVisible(true);
+
     }
 
     private void initBar() {
