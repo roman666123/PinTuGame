@@ -1,5 +1,7 @@
 package PinTuGame;
 import javax.swing.*;
+import java.util.Random;
+
 public class BeginJFrame extends JFrame{
     public BeginJFrame() {
         //设置界面的宽高
@@ -9,9 +11,47 @@ public class BeginJFrame extends JFrame{
 
         initBar();
 
+        //放置图片
 
+        SetPicture();
         this.setVisible(true);
 
+    }
+
+    private void SetPicture() {
+        //数组元素乱序处理
+        int []temp = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
+        int [][]temp2 =new int[4][4];
+        Random rd = new Random();
+        rebuildTemp2(temp, temp2, rd);
+
+        for (int i = 0;i< 4;i++){
+            for (int j = 0; j < 4; j++) {
+                ImageIcon i1 = new ImageIcon("D:\\WorkSpace\\JAVA\\PiniTuGame\\image\\animal\\animal3\\"+temp2[i][j]+".jpg");
+                JLabel jb = new JLabel(i1);
+                jb.setBounds(j*105,i*105,105,105);
+                this.getContentPane().add(jb);
+//                this.add(jb);
+
+            }
+
+        }
+    }
+
+    private static void rebuildTemp2(int[] temp, int[][] temp2, Random rd) {
+        for(int i = 0; i< temp.length; i++){
+            int ha ,hei = rd.nextInt(0,16);
+            ha = temp[i];
+            temp[i] = temp[hei];
+            temp[hei] = ha;
+        }
+        int count = 0;
+        for(int i =0;i<4;i++){
+            for(int j = 0;j<4;j++){
+                temp2[i][j] = temp[count];
+                count += 1;
+            }
+        }
     }
 
     private void initBar() {
@@ -49,5 +89,10 @@ public class BeginJFrame extends JFrame{
         this.setLocationRelativeTo(null);
         //设置关闭模式
         this.setDefaultCloseOperation(3);
+        //取消默认的居中放置,只有取消了才会按照xy轴的形式添加组件
+        //隐藏的容器不需要创建对象,这是一个隐藏窗体
+        this.setLayout(null);
+//        this.setBounds(null);
+
     }
 }
