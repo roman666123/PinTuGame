@@ -1,5 +1,6 @@
 package PinTuGame;
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 import java.util.Random;
 
 public class BeginJFrame extends JFrame{
@@ -23,22 +24,25 @@ public class BeginJFrame extends JFrame{
         int []temp = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
         int [][]temp2 =new int[4][4];
         Random rd = new Random();
+        //乱序数组,使数据乱序
         rebuildTemp2(temp, temp2, rd);
 
         for (int i = 0;i< 4;i++){
             for (int j = 0; j < 4; j++) {
                 ImageIcon i1 = new ImageIcon("D:\\WorkSpace\\JAVA\\PiniTuGame\\image\\animal\\animal3\\"+temp2[i][j]+".jpg");
                 JLabel jb = new JLabel(i1);
-                jb.setBounds(j*105,i*105,105,105);
+                jb.setBounds(j*105+80,i*105+100,105,105);
+                //添加边框
+                jb.setBorder(new BevelBorder(0));
                 this.getContentPane().add(jb);
-//                this.add(jb);
-
             }
-
         }
+        JLabel jb = new JLabel(new ImageIcon("D:\\WorkSpace\\JAVA\\PiniTuGame\\image\\background.png"));
+        jb.setBounds(36,6,508,560);
+        this.getContentPane().add(jb);
     }
 
-    private static void rebuildTemp2(int[] temp, int[][] temp2, Random rd) {
+    private  void rebuildTemp2(int[] temp, int[][] temp2, Random rd) {
         for(int i = 0; i< temp.length; i++){
             int ha ,hei = rd.nextInt(0,16);
             ha = temp[i];
