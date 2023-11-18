@@ -1,13 +1,18 @@
 package PinTuGame;
+
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Random;
 
-public class BeginJFrame extends JFrame{
+public class BeginJFrame extends JFrame implements KeyListener {
+    private int x = 0, y = 0;
+    private int[][] temp2 = new int[4][4];
+
     public BeginJFrame() {
         //设置界面的宽高
         initWindow();
-
         //初始化菜单
 
         initBar();
@@ -21,42 +26,46 @@ public class BeginJFrame extends JFrame{
 
     private void SetPicture() {
         //数组元素乱序处理
-        int []temp = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
-        int [][]temp2 =new int[4][4];
+        int[] temp = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
         Random rd = new Random();
         //乱序数组,使数据乱序
-        rebuildTemp2(temp, temp2, rd);
-
-        for (int i = 0;i< 4;i++){
-            for (int j = 0; j < 4; j++) {
-                ImageIcon i1 = new ImageIcon("D:\\WorkSpace\\JAVA\\PiniTuGame\\image\\animal\\animal3\\"+temp2[i][j]+".jpg");
-                JLabel jb = new JLabel(i1);
-                jb.setBounds(j*105+80,i*105+100,105,105);
-                //添加边框
-                jb.setBorder(new BevelBorder(0));
-                this.getContentPane().add(jb);
-            }
-        }
-        JLabel jb = new JLabel(new ImageIcon("D:\\WorkSpace\\JAVA\\PiniTuGame\\image\\background.png"));
-        jb.setBounds(36,6,508,560);
-        this.getContentPane().add(jb);
-    }
-
-    private  void rebuildTemp2(int[] temp, int[][] temp2, Random rd) {
-        for(int i = 0; i< temp.length; i++){
-            int ha ,hei = rd.nextInt(0,16);
+        for (int i = 0; i < temp.length; i++) {
+            int ha, hei = rd.nextInt(0, 16);
             ha = temp[i];
             temp[i] = temp[hei];
             temp[hei] = ha;
         }
         int count = 0;
-        for(int i =0;i<4;i++){
-            for(int j = 0;j<4;j++){
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
                 temp2[i][j] = temp[count];
                 count += 1;
+                if (temp2[i][j] == 0) {
+                    x = i;
+                    y = j;
+                }
             }
         }
+        // 加载图片
+        LoadingImages();
     }
+
+    private void LoadingImages() {
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                ImageIcon i1 = new ImageIcon("image\\animal\\animal3\\" + temp2[i][j] + ".jpg");
+                JLabel jb = new JLabel(i1);
+                jb.setBounds(j * 105 + 80, i * 105 + 100, 105, 105);
+                //添加边框
+                jb.setBorder(new BevelBorder(0));
+                this.getContentPane().add(jb);
+            }
+        }
+        JLabel jb = new JLabel(new ImageIcon("image\\background.png"));
+        jb.setBounds(36, 6, 508, 560);
+        this.getContentPane().add(jb);
+    }
+
 
     private void initBar() {
         JMenuBar jb = new JMenuBar();
@@ -84,7 +93,7 @@ public class BeginJFrame extends JFrame{
     }
 
     private void initWindow() {
-        this.setSize(600,680);
+        this.setSize(600, 680);
         //界面的标题设置
         this.setTitle("拼图单机版V1.0");
         //设置界面置顶
@@ -97,6 +106,63 @@ public class BeginJFrame extends JFrame{
         //隐藏的容器不需要创建对象,这是一个隐藏窗体
         this.setLayout(null);
 //        this.setBounds(null);
+        this.addKeyListener(this);
+    }
 
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        int choice = e.getKeyCode();
+        this.getContentPane().removeAll();
+        int judge = 0;
+        switch (choice) {
+            case 37:
+                System.out.println("向左移动");
+                judge = y + 1;
+                if (judge>=0&&judge < 4) {
+                    temp2[x][y] = temp2[x][y + 1];
+                    temp2[x][y + 1] = 0;
+                    y++;
+                }
+                break;
+            case 38:
+                judge = x + 1;
+                if (judge>=0&&judge < 4) {
+                    System.out.println("向上移动");
+                    temp2[x][y] = temp2[x + 1][y];
+                    temp2[x + 1][y] = 0;
+                    x++;
+                }
+                break;
+            case 39:
+                judge = y - 1;
+                if (judge>=0&&judge < 4) {
+                    System.out.println("向右移动");
+                    temp2[x][y] = temp2[x][y - 1];
+                    temp2[x][y - 1] = 0;
+                    y--;
+                }
+                break;
+            case 40:
+                judge = x - 1;
+                if (judge>=0&&judge < 4) {
+                    System.out.println("向下移动");
+                    temp2[x][y] = temp2[x - 1][y];
+                    temp2[x - 1][y] = 0;
+                    x--;
+                }
+                break;
+        }
+        LoadingImages();
+        this.getContentPane().repaint();
     }
 }
