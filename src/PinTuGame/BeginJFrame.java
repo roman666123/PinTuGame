@@ -9,7 +9,8 @@ import java.util.Random;
 public class BeginJFrame extends JFrame implements KeyListener {
     private int x = 0, y = 0;
     private int[][] temp2 = new int[4][4];
-
+    private String  path = "image\\animal\\animal3\\";
+    private int [][] win = {{1,2,3,4},{5,6,7,8},{9,10,11,12},{13,14,15,0}};
     public BeginJFrame() {
         //设置界面的宽高
         initWindow();
@@ -47,13 +48,13 @@ public class BeginJFrame extends JFrame implements KeyListener {
             }
         }
         // 加载图片
-        LoadingImages();
+        LoadingImages(temp2);
     }
 
-    private void LoadingImages() {
+    private void LoadingImages(int [][]temp) {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                ImageIcon i1 = new ImageIcon("image\\animal\\animal3\\" + temp2[i][j] + ".jpg");
+                ImageIcon i1 = new ImageIcon(path + temp[i][j] + ".jpg");
                 JLabel jb = new JLabel(i1);
                 jb.setBounds(j * 105 + 80, i * 105 + 100, 105, 105);
                 //添加边框
@@ -116,7 +117,13 @@ public class BeginJFrame extends JFrame implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-
+        int code = e.getKeyCode();
+        if (code == 65){
+            this.getContentPane().removeAll();
+            int [][]temp = {{1,2,3,4},{5,6,7,8},{9,10,11,12},{13,14,15,0}};
+            LoadingImages(temp);
+            this.getContentPane().repaint();
+        }
     }
 
     @Override
@@ -124,6 +131,7 @@ public class BeginJFrame extends JFrame implements KeyListener {
         int choice = e.getKeyCode();
         this.getContentPane().removeAll();
         int judge = 0;
+        if(judge()) return;
         switch (choice) {
             case 37:
                 System.out.println("向左移动");
@@ -161,8 +169,21 @@ public class BeginJFrame extends JFrame implements KeyListener {
                     x--;
                 }
                 break;
+            case 65:
+                break;
+            case 87:
+                temp2 = new int[][]{{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 0}};
+                break;
         }
-        LoadingImages();
+        LoadingImages(temp2);
         this.getContentPane().repaint();
+    }
+    private boolean judge(){
+        for(int i = 0;i< temp2.length;i++){
+            for (int j = 0; j < temp2.length; j++) {
+                if(temp2[i][j] != win[i][j]) return false;
+            }
+        }
+        return true;
     }
 }
